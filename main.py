@@ -8,7 +8,6 @@ from random import randrange as r
 cfg = configparser.ConfigParser()
 cfg.read('cfg.ini')
 
-# dados_conexao = fdb.connect(host='localhost', database=r'D:\Unifica\CM_Senges\origem\EQUIPLANO.FDB', user='sysdba', port=3050, password='masterkey')
 dados_conexao = fdb.connect(host='localhost', database=cfg['DEFAULT']['NomeBanco'], user='sysdba', port=3050, password='masterkey')
 cur = dados_conexao.cursor()
 
@@ -45,8 +44,8 @@ layout = [[sg.Text('Gerando Arquivos')],
           [sg.Output(size=(80,20))],
           [sg.ProgressBar(len(comandos), orientation='h', size=(53, 20), key='progressbar')],
           [sg.OK('Iniciar'), sg.Cancel()]]
-        # create the window`
-window = sg.Window('Arquivos - ' + cfg['DEFAULT']['CodEntidade'] + ' - ' + cfg['DEFAULT']['NomeEntidade'].replace("'",''), layout)
+
+window = sg.Window('Arquivos - ' + cfg['DEFAULT']['CodEntidade'] + ' - ' + cfg['DEFAULT']['NomeEntidade'].replace("'", '') , layout)
 progress_bar = window['progressbar']
 
 start()
