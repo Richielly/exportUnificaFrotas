@@ -312,7 +312,7 @@ coalesce(va.CODFORNECEDOR,'') ||'|'||
 coalesce(pj.CNPJ,'') ||'|'||
 coalesce(os.NRORDEMSERVICO, '') ||'|'||
 coalesce(va.DSOBSERVACAOAGENDAMENTOSERVICO,'') ||'|'||
-coalesce(va.TEMPVLACUMULADOR,'') ||'|'||
+coalesce(replace(va.TEMPVLACUMULADOR,'.',','),'') ||'|'||
 replace(va.vlacumuladoragendamentoservico,'.',',') ||'|' as extractVeiculoAgendamento
 from 
 scf_veiculoagendamentoservico va 
@@ -331,7 +331,7 @@ v.nrfrota ||'|'||
 COALESCE(os.CODFORNECEDOR,'') ||'|'||
 ts.nmtiposervico ||'|'||
 LPAD( EXTRACT( day FROM os.DTORDEMSERVICO), 2, '0' ) ||'/'|| LPAD( EXTRACT( month FROM os.DTORDEMSERVICO), 2, '0' ) ||'/'|| LPAD( EXTRACT( YEAR FROM os.DTORDEMSERVICO), 4, '0' ) ||'|'||
-LPAD( EXTRACT( day FROM os.DTINICIOORDEMSERVICO), 2, '0' ) ||'/'|| LPAD( EXTRACT( month FROM os.DTINICIOORDEMSERVICO), 2, '0' ) ||'/'|| LPAD( EXTRACT( YEAR FROM os.DTINICIOORDEMSERVICO), 4, '0' ) ||' '|| LPAD( EXTRACT( hour FROM os.DTINICIOORDEMSERVICO), 2, '0' ) ||':'|| LPAD( EXTRACT( minute FROM os.DTINICIOORDEMSERVICO), 2, '0' ) ||':'|| replace(LPAD( EXTRACT( second FROM os.DTINICIOORDEMSERVICO), 2, '0' ), '.', '0') ||'|'||
+coalesce(LPAD( EXTRACT( day FROM os.DTINICIOORDEMSERVICO), 2, '0' ) ||'/'|| LPAD( EXTRACT( month FROM os.DTINICIOORDEMSERVICO), 2, '0' ) ||'/'|| LPAD( EXTRACT( YEAR FROM os.DTINICIOORDEMSERVICO), 4, '0' ) ||' '|| LPAD( EXTRACT( hour FROM os.DTINICIOORDEMSERVICO), 2, '0' ) ||':'|| LPAD( EXTRACT( minute FROM os.DTINICIOORDEMSERVICO), 2, '0' ) ||':'|| replace(LPAD( EXTRACT( second FROM os.DTINICIOORDEMSERVICO), 2, '0' ), '.', '0'), LPAD( EXTRACT( day FROM os.DTORDEMSERVICO), 2, '0' ) ||'/'|| LPAD( EXTRACT( month FROM os.DTORDEMSERVICO), 2, '0' ) ||'/'|| LPAD( EXTRACT( YEAR FROM os.DTORDEMSERVICO), 4, '0' ) ) ||'|'||
 coalesce(LPAD( EXTRACT( day FROM vai.dtleituraacumulador), 2, '0' ) ||'/'|| LPAD( EXTRACT( month FROM vai.dtleituraacumulador), 2, '0' ) ||'/'|| LPAD( EXTRACT( YEAR FROM vai.dtleituraacumulador), 4, '0' ) ||' '|| LPAD( EXTRACT( hour FROM vai.dtleituraacumulador), 2, '0' ) ||':'|| LPAD( EXTRACT( minute FROM vai.dtleituraacumulador), 2, '0' ) ||':'|| replace(LPAD( EXTRACT( second FROM vai.dtleituraacumulador), 2, '0' ), '.', '0'),'') ||'|'||
 coalesce(LPAD( EXTRACT( day FROM vaf.dtleituraacumulador), 2, '0' ) ||'/'|| LPAD( EXTRACT( month FROM vaf.dtleituraacumulador), 2, '0' ) ||'/'|| LPAD( EXTRACT( YEAR FROM vaf.dtleituraacumulador), 4, '0' ) ||' '|| LPAD( EXTRACT( hour FROM vaf.dtleituraacumulador), 2, '0' ) ||':'|| LPAD( EXTRACT( minute FROM vaf.dtleituraacumulador), 2, '0' ) ||':'|| replace(LPAD( EXTRACT( second FROM vaf.dtleituraacumulador), 2, '0' ), '.', '0'),'') ||'|'||
 coalesce(LPAD( EXTRACT( day FROM os.DTTERMINOORDEMSERVICO), 2, '0' ) ||'/'|| LPAD( EXTRACT( month FROM os.DTTERMINOORDEMSERVICO), 2, '0' ) ||'/'|| LPAD( EXTRACT( YEAR FROM os.DTTERMINOORDEMSERVICO), 4, '0' ) ||' '|| LPAD( EXTRACT( hour FROM os.DTTERMINOORDEMSERVICO), 2, '0' ) ||':'|| LPAD( EXTRACT( minute FROM os.DTTERMINOORDEMSERVICO), 2, '0' ) ||':'|| replace(LPAD( EXTRACT( second FROM os.DTTERMINOORDEMSERVICO), 2, '0' ), '.', '0'),'') ||'|'||
