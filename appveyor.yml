@@ -14,7 +14,7 @@ install:
 - pip install -r requirements.txt
 
 build_script:
-- flet pack main.py --name export_unifica_frotas --icon icon_1.png --product-name export_unifica_frotas --product-version "2.0.1" --copyright "Copyright (c) 2023 Richielly Inc."
+- flet pack main.py --name export_unifica_frotas --icon img.png --product-name export_unifica_frotas --product-version "2.0.1" --copyright "Copyright (c) 2023 Richielly Inc."
 
 test: off
 
