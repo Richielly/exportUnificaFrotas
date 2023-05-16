@@ -1,0 +1,70 @@
+image:
+- Visual Studio 2019
+- macOS
+- Ubuntu
+
+skip_branch_with_pr: true
+stack: python 3.9
+
+environment:
+  GITHUB_TOKEN:
+    secure: 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
+
+install:
+- pip install -r requirements.txt
+
+build_script:
+- flet pack main.py --name export_unifica_frotas --icon icon_1.png --product-name export_unifica_frotas --product-version "2.0.1" --copyright "Copyright (c) 2023 Richielly Inc."
+
+test: off
+
+# Publish artifacts to GitHub Releases on "tag" builds
+deploy:
+  provider: GitHub
+  auth_token: $(GITHUB_TOKEN)
+  on:
+    APPVEYOR_REPO_TAG: true
+
+#
+#   Windows package
+# 
+for:
+-
+  matrix:
+    only:
+    - image: Visual Studio 2019
+
+  after_build:
+  - 7z a redirect_port-windows.zip %CD%\dist\*.exe
+
+  artifacts:
+  - path: export_unifica_frotas-windows.zip
+
+#
+#   macOS package
+# 
+-
+  matrix:
+    only:
+    - image: macOS
+
+  after_build:
+  - tar -czvf export_unifica_frotas-macos.tar.gz -C dist export_unifica_frotas.app
+
+  artifacts:
+  - path: export_unifica_frotas-macos.tar.gz
+
+#
+#   Linux package
+# 
+-
+  matrix:
+    only:
+    - image: Ubuntu
+
+  after_build:
+  - tar -czvf export_unifica_frotas-linux.tar.gz -C dist export_unifica_frotas
+
+  artifacts:
+  - path: export_unifica_frotas-linux.tar.gz
+
