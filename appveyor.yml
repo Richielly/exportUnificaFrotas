@@ -35,7 +35,7 @@ for:
     - image: Visual Studio 2019
 
   after_build:
-  - 7z a redirect_port-windows.zip %CD%\dist\*.exe
+  - 7z a export_unifica_frotas.zip %CD%\dist\*.exe
 
   artifacts:
   - path: export_unifica_frotas-windows.zip
