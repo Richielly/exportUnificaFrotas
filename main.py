@@ -1,3 +1,5 @@
+import os
+
 import flet as ft
 import time
 import fdb
@@ -18,6 +20,9 @@ def main(page: ft.Page):
     progressBar = ft.ProgressBar(width=700, color=ft.colors.DEEP_ORANGE)
 
     def start(host='localhost', database=cfg['DEFAULT']['NomeBanco'], user='sysdba', port=3050, password='masterkey'):
+
+        if not os.path.exists(txt_local_arquivos.value):
+            os.makedirs(txt_local_arquivos.value)
         try:
             dados_conexao = fdb.connect(host=host, database=database, user=user, port=port, password=password)
         except BaseException as e:
@@ -35,20 +40,20 @@ def main(page: ft.Page):
             for comando in comandos:
                 step+=1
                 list_arquivos.update()
-                list_arquivos.controls.append(ft.Text(f'{step}° Arquivo: ' + comando + ' iniciado em ' + time.strftime("%d/%m/%y %H:%M:%S"), size=10, color=ft.colors.GREEN))
+                list_arquivos.controls.append(ft.Text(f'{step}° Arquivo: ' + comando + ' iniciado em ' + time.strftime("%d/%m/%y %H:%M:%S"), size=16, color=ft.colors.GREEN))
                 cur.execute(comandos[comando])
                 result = cur.fetchall()
                 arquivo = open(
-                    cfg['DEFAULT']['DiretorioArquivos'] + comando + '_' + cfg['DEFAULT']['CodEntidade'] + '.txt', "w",
+                    txt_local_arquivos.value + comando + '_' + cfg['DEFAULT']['CodEntidade'] + '.txt', "w",
                     newline='', encoding='ANSI')
 
                 for inf in result:
                     arquivo.write(str(inf[0]).replace('#sec#', str(r(0, 5)) + str(r(0, 9))) + '\n')
                 if len(result) < 1:
-                    list_arquivos.controls.append(ft.Text('-- Finalizado em ' + time.strftime("%d/%m/%y %H:%M:%S"), size=10, color=ft.colors.ORANGE))
+                    list_arquivos.controls.append(ft.Text('-- Finalizado em ' + time.strftime("%d/%m/%y %H:%M:%S"), size=16, color=ft.colors.ORANGE))
                     sem_dados+=1
                 else:
-                    list_arquivos.controls.append(ft.Text('-- Finalizado em ' + time.strftime("%d/%m/%y %H:%M:%S"), size=10))
+                    list_arquivos.controls.append(ft.Text('-- Finalizado em ' + time.strftime("%d/%m/%y %H:%M:%S"), size=16))
                     com_dados+=1
                 for i in range(0, len(comandos)+1):
                     progressBar.value = step / len(comandos)
@@ -85,22 +90,25 @@ def main(page: ft.Page):
 
             page.update()
 
-    txt_entidade = ft.TextField(label="Entidade", text_size=12, value=cfg['DEFAULT']['CodEntidade'], width=100, height=30)
+    txt_entidade = ft.TextField(label="Entidade", text_size=12, value=cfg['DEFAULT']['CodEntidade'], width=100, height=30, disabled=True, tooltip='Para altera o código de entidade é preciso atualizar o arquivo "cfg.ini"')
     txt_host = ft.TextField(label="Host", text_size=12, value='localhost', width=100, height=30)
     txt_user = ft.TextField(label="User", text_size=12, value='sysdba', width=100, height=30)
     txt_password = ft.TextField(label="Password", text_size=12, value='masterkey', width=130, height=30,password=True, can_reveal_password=True)
     txt_database = ft.TextField(label="Caminho do Banco", value=cfg['DEFAULT']['NomeBanco'], text_size=12, height=40)
+    txt_local_arquivos = ft.TextField(label="Caminho dos Arquivos gerados", value=cfg['DEFAULT']['DiretorioArquivos'], text_size=12, height=40)
     txt_port = ft.TextField(label="Porta", text_size=12, value=3050, width=100, height=30)
     txt_header = ft.Text('Arquivos Gerados')
     page.add(ft.Row([txt_entidade, txt_host, txt_port, txt_user, txt_password]))
     page.add(txt_database)
+    page.add(txt_local_arquivos)
     page.add(ft.Row([ft.ElevatedButton("Gerar Arquivos", on_click=btn_click, icon=ft.icons.ADD_BOX)]))
     page.add(txt_header)
     list_arquivos = ft.ListView(expand=1, spacing=2, padding=20, auto_scroll=True)
 
 
 if __name__ == "__main__":
-    ft.app(port=3636, target=main, view=ft.WEB_BROWSER)
+    # ft.app(port=3636, target=main, view=ft.WEB_BROWSER)
+    ft.app(port=3333, target=main)
 
 
-# pyinstaller --name redirect_port --onefile --noconsole main.py
+#  pyinstaller --name export_unifica_frotas --onefile --icon=img.ico --noconsole main.py
