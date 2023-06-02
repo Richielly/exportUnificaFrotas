@@ -1,5 +1,4 @@
 import os
-
 import flet as ft
 import time
 import fdb
@@ -7,6 +6,8 @@ import configparser
 import script
 from random import randrange as r
 from time import sleep
+
+import update_sequence
 
 cfg = configparser.ConfigParser()
 cfg.read('cfg.ini')
@@ -89,6 +90,14 @@ def main(page: ft.Page):
                     progressBar.update()
 
             page.update()
+    def atualizar_sequence(e):
+        atualiza = update_sequence.Update_sequence()
+
+        if atualiza.atualiza_sequence()[0]:
+            txt_header.value = "Sequências Atualizadas com sucesso! \n" + str(atualiza.atualiza_sequence()[1])
+        else:
+            txt_header.value = "As sequências não foram atualizadas, verifique manualmente!\n " + str(atualiza.atualiza_sequence()[1])
+        page.update()
 
     txt_entidade = ft.TextField(label="Entidade", text_size=12, value=cfg['DEFAULT']['CodEntidade'], width=100, height=30, disabled=True, tooltip='Para altera o código de entidade é preciso atualizar o arquivo "cfg.ini"')
     txt_host = ft.TextField(label="Host", text_size=12, value='localhost', width=100, height=30)
@@ -102,6 +111,7 @@ def main(page: ft.Page):
     page.add(txt_database)
     page.add(txt_local_arquivos)
     page.add(ft.Row([ft.ElevatedButton("Gerar Arquivos", on_click=btn_click, icon=ft.icons.ADD_BOX)]))
+    page.add(ft.Row([ft.ElevatedButton("Atualizar Sequências", on_click=atualizar_sequence, icon=ft.icons.SETTINGS)]))
     page.add(txt_header)
     list_arquivos = ft.ListView(expand=1, spacing=2, padding=20, auto_scroll=True)
 
