@@ -37,7 +37,6 @@ def main(page: ft.Page):
         sem_dados = 0
         step = 0
         while True:
-            print(comandos)
 
             for comando in comandos:
                 step+=1
@@ -97,18 +96,22 @@ def main(page: ft.Page):
     def atualizar_sequence(e):
         atualiza = update_sequence.Update_sequence()
 
-        database_sequence = txt_database.value
-        host_sequence = txt_host.value
-        user_sequence = txt_user.value
-        port_sequence = txt_port.value
-        password_sequence = txt_password.value
+        list_arquivos.controls.clear()
 
-        if atualiza.atualiza_sequence(host=host_sequence, port=port_sequence, user=user_sequence, password=password_sequence, database=database_sequence)[0]:
-            txt_header.value = "Sequências Atualizadas com sucesso! \n" + str(atualiza.atualiza_sequence()[1])
+        database_sequence = txt_database_sequence.value
+        host_sequence = txt_host_sequence.value
+        user_sequence = txt_user_sequence.value
+        port_sequence = txt_port_sequence.value
+        password_sequence = txt_password_sequence.value
+
+        status, msg = atualiza.atualiza_sequence(host=host_sequence, port=port_sequence, user=user_sequence, password=password_sequence, database=database_sequence)
+        if atualiza:
+            txt_header.value = str(status)+"\n" + str(msg)
         else:
-            txt_header.value = "As sequências não foram atualizadas, verifique manualmente!\n " + str(atualiza.atualiza_sequence()[1])
+            txt_header.value = "As sequências não foram atualizadas, verifique manualmente!\n " + str(msg)
         page.update()
 
+    ft.Divider(height=9, thickness=3),
     txt_entidade = ft.TextField(label="Entidade", text_size=12, value=cfg['DEFAULT']['CodEntidade'], width=100, height=30, disabled=False, tooltip='Alterar o código de entidade, tambem altera o arquivo "cfg.ini"')
     txt_host = ft.TextField(label="Host", text_size=12, value='localhost', width=100, height=30)
     txt_user = ft.TextField(label="User", text_size=12, value='sysdba', width=100, height=30)
@@ -121,18 +124,17 @@ def main(page: ft.Page):
     page.add(txt_database)
     page.add(txt_local_arquivos)
     page.add(ft.Row([ft.ElevatedButton("Gerar Arquivos", on_click=btn_click, icon=ft.icons.ADD_BOX)]))
-    page.add(txt_header)
     list_arquivos = ft.ListView(expand=1, spacing=2, padding=20, auto_scroll=True)
-
+    page.add(ft.Divider(height=2, thickness=3))
     txt_host_sequence = ft.TextField(label="Host", text_size=12, value='localhost', width=100, height=30)
     txt_user_sequence = ft.TextField(label="User", text_size=12, value='sysdba', width=100, height=30)
     txt_password_sequence = ft.TextField(label="Password", text_size=12, value='masterkey', width=130, height=30, password=True, can_reveal_password=True)
-    txt_database_sequence = ft.TextField(label="Caminho do Banco para nova sequência", value=cfg['DEFAULT']['NomeBancoSequence'], text_size=12, height=40)
+    txt_database_sequence = ft.TextField(label="Caminho do Banco para nova sequência", value=cfg['DEFAULT']['NomeBancoSequence'], text_size=12, height=30, width=776)
     txt_port_sequence = ft.TextField(label="Porta", text_size=12, value=3050, width=100, height=30)
-    page.add(ft.Row([txt_host_sequence, txt_port_sequence, txt_user_sequence, txt_password_sequence]))
-    page.add(txt_database_sequence)
+    page.add(ft.Row([txt_host_sequence, txt_port_sequence, txt_user_sequence, txt_password_sequence, txt_database_sequence]))
     page.add(ft.Row([ft.ElevatedButton("Atualizar Sequências", on_click=atualizar_sequence, icon=ft.icons.SETTINGS)]))
-
+    page.add(ft.Divider(height=2, thickness=3))
+    page.add(txt_header)
 
 if __name__ == "__main__":
     # ft.app(port=3636, target=main, view=ft.WEB_BROWSER)

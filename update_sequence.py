@@ -33,7 +33,7 @@ class Update_sequence:
 
         return result, cur
 
-    def atualiza_sequence(self, host=cfg['DEFAULT']['Host'], database=cfg['DEFAULT']['NomeBancoSequence'], user=cfg['DEFAULT']['User'], port=cfg['DEFAULT']['Port'], password=cfg['DEFAULT']['Password']):
+    def atualiza_sequence(self, host, database, user, port, password):
         sequencia, cur = self.sequences(host=host, database=database, user=user, port=int(port), password=password)
         if not cur:
             return cur, sequencia
