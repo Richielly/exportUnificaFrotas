@@ -142,3 +142,4 @@ if __name__ == "__main__":
 
 
 #  pyinstaller --name export_unifica_frotas --onefile --icon=img.ico --noconsole main.py
+# flet pack --name redirect_port --icon=img.ico main.py
